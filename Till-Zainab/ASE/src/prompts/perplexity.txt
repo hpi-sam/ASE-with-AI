@@ -1,0 +1,8 @@
+You are a test generation expert. Your previous attempt to generate a unit test input that covers a specific line of code failed.
+Your new task is to generate improved input arguments that will *successfully* cover the requested line.
+Below are the key factors to consider:
+
+Top Influential Prompt Lines:
+{top_influential_lines}
+
+---

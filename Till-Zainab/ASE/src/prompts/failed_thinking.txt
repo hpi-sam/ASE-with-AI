@@ -1,0 +1,105 @@
+You are a test generation expert. Your previous attempt to generate a unit test input that covers a specific line of code failed.
+Your new task is to generate improved input arguments that will *successfully* cover the requested line.
+Below are the key factors to consider:
+
+Failed Attempts:
+{failed_attempts_info}
+
+---
+
+Step-by-step Reasoning (REQUIRED):
+
+1. Analyze why the previous attempt(s) failed to reach the target line.
+   - What control structures (if-statements, loops, early returns, etc.) blocked the execution?
+   - What inputs were used previously, and how did they fall short?
+   - Refer to surrounding lines (above/below the target line) to understand the execution flow.
+
+2. Based on this analysis, **propose a new, different input** that navigates through the function correctly and executes the desired line.
+
+3. Simulate the execution path of your new input:
+   - Note which parts of the function will execute with your proposed input.
+   - Confirm the target line will indeed be reached.
+
+---
+
+Format your final output strictly as:
+<think>
+Your reasoning and corrected path here.
+</think>
+function_name(arg1, arg2, ...)
+
+Here is an example of a good output (Note that it is for a different function and should just show you how you should structure your thinking):
+```
+🔍 Initial Analysis: Why Previous Attempts Failed
+Attempt 1:
+gridworld_5_cases_30_percent_returns((3, 5), ['north'])
+    Starts at correct position.
+    But "north" is consumed at line 29, even though the direction doesn't match.
+    By the time we reach line 45, actions is empty → get_next_action() returns None → line 47 not reached.
+
+Attempt 2:
+gridworld_5_cases_30_percent_returns((3, 5), ['east', 'north'])
+    "east" is not used in any condition → skipped.
+    "north" is consumed at line 29.
+    Again, at line 45, actions is empty → condition fails → line 47 not hit.
+
+🎯 Target Condition (line 45)
+We want:
+if current_position == (3, 5) and get_next_action(actions) == "north":
+    So at line 45:
+        We must still be at (3, 5)
+        "north" must be the next action to pop
+
+❌ Testing Failed Input
+gridworld_5_cases_30_percent_returns((3, 5), ['north'])
+
+Step-by-step:
+    Line 29: (3, 5) and "north" → "north" ≠ "south" → skip → "north" consumed
+    Line 33–45: All future get_next_action() calls return None
+    Line 45: Fails → actions is empty
+    ❌ Line 47 not hit
+
+✅ Corrected Input Strategy
+To keep "north" available at line 45:
+    Move agent away and back to (3, 5) using earlier conditions
+    Consume 4 actions before line 45
+    5th action should be "north" at (3, 5)
+
+Proposed Input:
+gridworld_5_cases_30_percent_returns((3, 5), ['south', 'north', 'south', 'north', 'north'])
+
+🔁 Step-by-step Execution of Correct Input
+Initial: (3, 5)
+Actions: ['south', 'north', 'south', 'north', 'north']
+    Line 29: (3, 5) and "south" ✅ → move to (4, 5)
+    Line 33: (4, 5) and "north" ✅ → move to (3, 5)
+    Line 37: (3, 5) and "south" ✅ → move to (4, 5)
+    Line 41: (4, 5) and "north" ✅ → move to (3, 5)
+    Line 45: (3, 5) and "north" ✅
+    ✅ Line 47 is executed
+</think> gridworld_5_cases_30_percent_returns((3, 5), ['south', 'north', 'south', 'north', 'north'])
+``` End of good output example.
+
+Here is the end of a bad thinking example:
+```
+🔁 Step-by-step Execution of Correct Input
+Initial: (6, 6)
+Actions: ['east']
+Line 39: (6, 6) and "east" condition is checked.
+    - Condition is true.
+    - Redirects to the return statement at line 41.
+    - Action is deemed invalid.
+    - Returns {{"valid_action_sequence": False, "final_position": (6, 6)}}.
+    ✅ Line 41 is now reached and successfully executed.
+```
+This example is bad because it does not actually go through the function line by line with the proposed inputs but just assumes they will work.
+You should avoid this shortcut and actually go through the entire function to test the input behaviour. If at any point you notice that it will not work,
+you can regenerate a new set of input arguments to test based on your observations which kind of inputs are requires to meet the constraints etc.
+
+**Thus, you should step through all conditionals and function logic step-by-step to validate your input in the thinking. 
+Do not just go through the first few lines and assume the rest will work - trace the entire execution path from start to finish to ensure your proposed input actually reaches the target line!!**
+Always follow this rule!
+
+---
+
+Now write your answer with reasoning and function call. Do not use ``` and just output <think> ... </think> function(args)

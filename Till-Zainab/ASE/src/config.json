@@ -1,0 +1,13 @@
+{
+  "model": "gpt-4o",
+  "perplexity_enabled": false,
+  "failed_attempts_enabled": true,
+  "thinking_enabled": true,
+  "max_rewrite_iterations": 2,
+  "temperature": 1.0,
+  "max_tokens": 1000,
+  "coverage_threshold": 0.0,
+  "top_perplexity_lines": 5,
+  "max_pipeline_iterations": 30,
+  "perplexity_max_workers": 10
+}

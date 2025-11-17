@@ -1,0 +1,29 @@
+You are a test generation expert.
+Your task: Generate input arguments for a **single unit test** that executes **a specific line** in the function below.
+Only ONE test input is needed — focus purely on triggering the desired line.
+
+---
+
+Function to test:
+{function_code}
+
+Function name: {func_info_name}  
+Parameters: {func_info_params}
+
+Target line to cover: `Line {target_line}`
+Line content: `{target_line_content}`
+
+Existing tests (for context — avoid trying these exact inputs again as they failed to cover the specified line):
+{existing_tests}
+
+---
+
+Rules:
+- Your input **must execute line {target_line}** during function execution.
+- Only provide the function **call with arguments** — do **not** include expected output or extra explanation.
+- Make sure to choose input values that follow the correct code path (e.g., through if-conditions, loops, early returns) to reach the line.
+
+Correct Format example:
+function_name(42, "hello")
+
+---
